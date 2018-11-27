@@ -9,11 +9,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Role extends BasicEntity{
 
     private String name;
 

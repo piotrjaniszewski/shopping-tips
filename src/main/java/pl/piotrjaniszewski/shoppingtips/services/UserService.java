@@ -1,7 +1,6 @@
 package pl.piotrjaniszewski.shoppingtips.services;
 
 import org.springframework.stereotype.Service;
-import pl.piotrjaniszewski.shoppingtips.DTOs.UserDTO;
 import pl.piotrjaniszewski.shoppingtips.domain.User;
 
 import java.util.List;
