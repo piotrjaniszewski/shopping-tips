@@ -9,7 +9,8 @@ import pl.piotrjaniszewski.shoppingtips.repositories.PrivilegeRepository;
 import pl.piotrjaniszewski.shoppingtips.repositories.RoleRepository;
 import pl.piotrjaniszewski.shoppingtips.repositories.UserRepository;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
@@ -57,7 +58,7 @@ public class Bootstrap implements CommandLineRunner {
         user.setRoles(roles);
         userRepository.save(user);
 
-        System.out.println("Users loaded:    "+userRepository.findAll().size());
+        System.out.println("Users loaded: "+userRepository.findAll().size());
     }
 
     private Privilege createPrivilegeIfNotFound(String name) {

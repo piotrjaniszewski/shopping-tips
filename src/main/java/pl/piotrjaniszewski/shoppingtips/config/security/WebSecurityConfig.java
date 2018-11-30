@@ -1,6 +1,8 @@
 package pl.piotrjaniszewski.shoppingtips.config.security;
 
+import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,6 +28,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    ServletRegistrationBean h2servletRegistration(){
+        ServletRegistrationBean registrationBean = new ServletRegistrationBean( new WebServlet());
+        registrationBean.addUrlMappings("/console/*");
+        return registrationBean;
+    }
+
+    @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -38,12 +47,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-
                 // No need authentication.
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/user/personalinfo").hasAuthority("READ_PRIVILEGE")
-
+                .antMatchers(HttpMethod.GET,"/console/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/console/**").permitAll()
+                .antMatchers("/console/**").permitAll()
                 // Need authentication.
                 .anyRequest().authenticated()
 
@@ -52,5 +62,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JWTLoginFilter("/login", authenticationManager(),tokenAuthenticationService, userDetailsService), UsernamePasswordAuthenticationFilter.class) // Add Filter 1 - JWTLoginFilter
                 .addFilterBefore(new JWTAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)// Add Filter 2 - JWTAuthenticationFilter
                 .logout();
+
+        http.authorizeRequests().antMatchers("/").permitAll().and()
+                .authorizeRequests().antMatchers("/console/**").permitAll();
+
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 }

@@ -9,7 +9,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-public class User extends BasicEntity{
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String username;
     private String password;

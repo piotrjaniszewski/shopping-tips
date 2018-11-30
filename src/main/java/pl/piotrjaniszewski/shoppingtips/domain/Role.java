@@ -9,8 +9,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class Role extends BasicEntity{
-
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
