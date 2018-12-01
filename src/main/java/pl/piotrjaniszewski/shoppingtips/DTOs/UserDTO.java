@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDTO {
 
-    @JsonIgnore
     private Long id;
     private String username;
     private String email;
