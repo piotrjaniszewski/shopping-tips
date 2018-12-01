@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -26,13 +27,14 @@ public class Product {
     private Category category;
 
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<ProductOpinion> opinions;
+    private Set<ProductOpinion> opinions = new HashSet<>();
 
-    private LocalDateTime date;
+    private LocalDateTime creationDateTime = LocalDateTime.now();
+    private LocalDateTime lastUpdateTime = LocalDateTime.now();
+
     private boolean accepted;
 
     public Product(){
-        date = LocalDateTime.now();
         accepted = false;
     }
 
@@ -40,5 +42,19 @@ public class Product {
         opinion.setProduct(this);
         opinions.add(opinion);
         return this;
+    }
+
+    public void setCategory(Category category){
+        category.addProduct(this);
+        this.category=category;
+    }
+
+    public void setProducer(Producer producer){
+        producer.addProduct(this);
+        this.producer=producer;
+    }
+
+    public void updateTime(){
+        lastUpdateTime = LocalDateTime.now();
     }
 }

@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,7 +22,9 @@ public abstract class Opinion {
     private String disadvantages;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "opinion")
-    private List<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
+
+    private LocalDateTime creationDateTime = LocalDateTime.now();
 
     public Opinion addComment(Comment comment){
         comment.setOpinion(this);

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,4 +17,6 @@ public class Comment  {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Opinion opinion;
+
+    private LocalDateTime creationDateTime = LocalDateTime.now();
 }

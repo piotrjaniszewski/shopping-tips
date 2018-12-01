@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -17,18 +19,20 @@ public class Producer {
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "producer")
-    private Set<ProducerOpinion> opinions;
+    private Set<ProducerOpinion> opinions = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "producer")
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();
 
-    private Producer addProduct(Product product){
+    private LocalDateTime creationDateTime = LocalDateTime.now();
+
+    public Producer addProduct(Product product){
         product.setProducer(this);
         products.add(product);
         return this;
     }
 
-    private Producer addOpinion(ProducerOpinion opinion){
+    public Producer addOpinion(ProducerOpinion opinion){
         opinion.setProducer(this);
         opinions.add(opinion);
         return this;

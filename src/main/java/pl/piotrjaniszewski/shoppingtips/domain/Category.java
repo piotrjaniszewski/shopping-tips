@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class Category {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category categoryAbove;
+
+    private LocalDateTime creationDateTime = LocalDateTime.now();
 
     public Category addSubcategory(Category subcategory){
         subcategory.setCategoryAbove(this);
