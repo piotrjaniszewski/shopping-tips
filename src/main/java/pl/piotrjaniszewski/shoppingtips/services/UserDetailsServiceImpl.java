@@ -12,10 +12,7 @@ import pl.piotrjaniszewski.shoppingtips.domain.Role;
 import pl.piotrjaniszewski.shoppingtips.domain.User;
 import pl.piotrjaniszewski.shoppingtips.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,14 +28,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(s);
 
-        UserBuilder builder = null;
+        UserBuilder builder;
 
         System.out.println();
         if(userOptional.isPresent()){
             User user = userOptional.get();
             builder = org.springframework.security.core.userdetails.User.withUsername(s);
             builder.password(new BCryptPasswordEncoder().encode(user.getPassword()));
-//            builder.roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()).toArray(new String[]{}));
+            builder.roles(getRoles(user.getRoles()));
             builder.authorities(getPrivileges(user.getRoles()));
             return builder.build();
         }
@@ -53,5 +50,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         return new ArrayList<>(collection);
     }
-
+    private String[] getRoles(Set<Role> roles ){
+        return roles.stream().map(Role::getName).collect(Collectors.toList()).toArray(new String[]{});
+    }
+    //TODO zmienic username na password
 }

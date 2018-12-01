@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -13,13 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+
+    @JsonIgnore
     private Long id;
     private String username;
     private String email;
     private String name;
-    private String LastName;
+    private String lastName;
+    private LocalDateTime creationDateTime;
 
     @JsonIgnore
     private String password;
+
+    @JsonIgnore
     private List<String> roleNames;
 }

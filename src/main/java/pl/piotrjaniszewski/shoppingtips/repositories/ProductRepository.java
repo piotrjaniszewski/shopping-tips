@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.piotrjaniszewski.shoppingtips.domain.Category;
 import pl.piotrjaniszewski.shoppingtips.domain.Producer;
 import pl.piotrjaniszewski.shoppingtips.domain.Product;
+import pl.piotrjaniszewski.shoppingtips.domain.User;
 
 import java.util.Optional;
 import java.util.Set;
@@ -18,4 +19,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Set<Product> findAllByAccepted(Boolean accepted);
     Set<Product> findAllByNameContaining(String name);
     Set<Product> findAllByDescriptionContaining(String desc);
+    Set<Product> findAllByCreator(User user);
 }

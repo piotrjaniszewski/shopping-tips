@@ -24,6 +24,10 @@ public class Producer {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "producer")
     private Set<Product> products = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
+    private Boolean deleted=false;
     private LocalDateTime creationDateTime = LocalDateTime.now();
 
     public Producer addProduct(Product product){

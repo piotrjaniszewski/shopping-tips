@@ -1,7 +1,5 @@
 package pl.piotrjaniszewski.shoppingtips.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,9 +22,7 @@ public class UserController {
         this.userToUserDTO = userToUserDTO;
     }
 
-    @JsonIgnore
-    @JsonProperty("password")
-    @GetMapping("/api/user/personalinfo")
+    @GetMapping("/user/personalinfo")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO myPersonalInfo(@RequestHeader(name = "Authorization") String authHeader){
         String username = JwtTokenUtil.getUsernameFromToken(authHeader.replace("Bearer ", ""));

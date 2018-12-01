@@ -17,13 +17,17 @@ public abstract class Opinion {
     private Long id;
     private String content;
     private Byte grade;
-
+    private Integer rating=0;
     private String advantages;
     private String disadvantages;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "opinion")
     private Set<Comment> comments = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
+    private Boolean deleted=false;
     private LocalDateTime creationDateTime = LocalDateTime.now();
 
     public Opinion addComment(Comment comment){

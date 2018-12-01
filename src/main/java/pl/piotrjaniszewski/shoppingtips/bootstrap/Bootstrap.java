@@ -27,27 +27,43 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        loadRoles();
         loadUsers();
     }
 
     private void loadUsers(){
-        Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-
-        Role adminRole = createRoleIfNotFound("ROLE_ADMIN");
-        adminRole.addPrivilege(readPrivilege);
-        adminRole.addPrivilege(writePrivilege);
-
-        User user = new User();
-        user.setUsername("user1");
-        user.setPassword("p1");
-        user.setEmail("dupa@dupa.dupa");
-        user.setName("Dupa");
-        user.setLastName("Smierdzi");
-        user.addRole(adminRole);
-        userRepository.save(user);
+        User adminUser = new User();
+        adminUser.setUsername("user1");
+        adminUser.setPassword("p1");
+        adminUser.setEmail("dupa@dupa.dupa");
+        adminUser.setName("Dupa");
+        adminUser.setLastName("Smierdzi");
+        adminUser.addRole(createRoleIfNotFound("ADMIN"));
+        userRepository.save(adminUser);
 
         System.out.println("Users loaded: "+userRepository.findAll().size());
+    }
+
+    private void loadRoles(){
+        Privilege userPrivilege = createPrivilegeIfNotFound("USER_PRIVILEGE");
+        Privilege moderatorPrivilege = createPrivilegeIfNotFound("MODERATOR_PRIVILEGE");
+        Privilege adminPrivilege = createPrivilegeIfNotFound("ADMIN_PRIVILEGE");
+
+        Role userRole = createRoleIfNotFound("USER");
+        Role moderatorRole = createRoleIfNotFound("MODERATOR");
+        Role adminRole = createRoleIfNotFound("ADMIN");
+
+        userRole.addPrivilege(userPrivilege);
+        roleRepository.save(userRole);
+
+        moderatorRole.addPrivilege(userPrivilege);
+        moderatorRole.addPrivilege(moderatorPrivilege);
+        roleRepository.save(moderatorRole);
+
+        adminRole.addPrivilege(userPrivilege);
+        adminRole.addPrivilege(moderatorPrivilege);
+        adminRole.addPrivilege(adminPrivilege);
+        roleRepository.save(adminRole);
     }
 
     private Privilege createPrivilegeIfNotFound(String name) {

@@ -25,10 +25,12 @@ public class UserDTOtoUser implements Converter<UserDTO, User> {
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
         user.setLastName(userDTO.getLastName());
+        user.setPassword(userDTO.getPassword());
         user.setRoles(
                 userDTO.getRoleNames().stream()
                     .map(roleRepository::findRoleByName)
                     .collect(Collectors.toSet()));
+        user.setCreationDateTime(userDTO.getCreationDateTime());
         return user;
     }
 }

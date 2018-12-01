@@ -24,7 +24,7 @@ public class UserToUserDTO implements Converter<User, UserDTO> {
                 user.getRoles().stream()
                         .map(Role::getName)
                         .collect(Collectors.toList()));
-
+        userDTO.setCreationDateTime(user.getCreationDateTime());
         return userDTO;
     }
 }

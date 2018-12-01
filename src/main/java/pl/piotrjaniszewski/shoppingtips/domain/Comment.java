@@ -14,9 +14,14 @@ public class Comment  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private Integer rating=0;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Opinion opinion;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
+    private Boolean deleted=false;
     private LocalDateTime creationDateTime = LocalDateTime.now();
 }

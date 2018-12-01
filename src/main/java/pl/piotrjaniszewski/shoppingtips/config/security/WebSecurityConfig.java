@@ -48,25 +48,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 // No need authentication.
-                .antMatchers("/").permitAll()
+                .antMatchers(HttpMethod.GET, "/public/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/public/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/user/personalinfo").hasAuthority("READ_PRIVILEGE")
-                .antMatchers(HttpMethod.GET,"/console/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/console/**").permitAll()
-                .antMatchers("/console/**").permitAll()
-                // Need authentication.
-                .anyRequest().authenticated()
-
+                // Need user authentication.
+                .antMatchers(HttpMethod.GET,"/user/**").hasAuthority("USER_PRIVILEGE")
+                .antMatchers(HttpMethod.POST,"/user/**").hasAuthority("USER_PRIVILEGE")
+                // Need moderator authentication.
+                .antMatchers(HttpMethod.GET,"/mod/**").hasAuthority("MODERATOR_PRIVILEGE")
+                .antMatchers(HttpMethod.POST,"/mod/**").hasAuthority("MODERATOR_PRIVILEGE")
+                // Need admin authentication.
+                .antMatchers(HttpMethod.GET,"/admin/**").hasAuthority("ADMIN_PRIVILEGE")
+                .antMatchers(HttpMethod.POST,"/admin/**").hasAuthority("ADMIN_PRIVILEGE")
+                // H2 database console
+                .antMatchers("/console/**").permitAll()//h2 database console
+                .antMatchers("/").permitAll()
                 //
                 .and()
                 .addFilterBefore(new JWTLoginFilter("/login", authenticationManager(),tokenAuthenticationService, userDetailsService), UsernamePasswordAuthenticationFilter.class) // Add Filter 1 - JWTLoginFilter
                 .addFilterBefore(new JWTAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)// Add Filter 2 - JWTAuthenticationFilter
                 .logout();
-
-        http.authorizeRequests().antMatchers("/").permitAll().and()
-                .authorizeRequests().antMatchers("/console/**").permitAll();
-
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+        http.headers().frameOptions().disable();//h2 database console
     }
 }

@@ -29,14 +29,13 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "product")
     private Set<ProductOpinion> opinions = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User creator;
+
     private LocalDateTime creationDateTime = LocalDateTime.now();
     private LocalDateTime lastUpdateTime = LocalDateTime.now();
 
-    private boolean accepted;
-
-    public Product(){
-        accepted = false;
-    }
+    private boolean accepted = false;
 
     public Product addOpinion(ProductOpinion opinion){
         opinion.setProduct(this);
